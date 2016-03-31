@@ -27,6 +27,7 @@ public class SuscribeActivity extends AppCompatActivity implements View.OnClickL
     ImageButton profilepicture_view;
     ImageButton imagePick;
     private final static int SELECT_PHOTO = 12345;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
