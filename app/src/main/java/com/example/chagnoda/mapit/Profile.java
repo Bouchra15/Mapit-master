@@ -1,17 +1,24 @@
 package com.example.chagnoda.mapit;
 import android.media.Image;
 
+import java.util.List;
+
 /**
  * Created by David on 22/03/2016.
  */
 public class Profile {
-    private String username;
+    private String username; //
     private String email;
     private String password;
-    private Image profilepicture;
+    private Image profilepicture;  //
     private Profile[] friends;
     private Photo[] photos;
     private String Password;
+
+
+
+
+
    // public Groupe[] actualGroups;
    // public Groupe[] groupsHistory;
 
