@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 /**
@@ -21,6 +23,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     TextView profileName;
     ImageView photoProfile;
 
+    Profile Profiles;
+
    // public List<FriendListActivity> friendsProfile;
     //public List<EventListActivity> Events;
 
@@ -31,6 +35,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         photoProfile=(ImageView)findViewById(R.id.PhotoProfile);
         profileName=(TextView)findViewById(R.id.profilename_text);
+
+        Intent intent=getIntent();
+
+        String sprofileName=intent.getStringExtra("NAME");
+        String sphotoProfile=intent.getStringExtra("PHOTO");
+
+
+        profileName.setText(sprofileName);
+        Picasso.with(this).load(sphotoProfile).into(photoProfile);
 
         amis=(Button)findViewById(R.id.button_Amis);
         events=(Button)findViewById(R.id.button_Events);
@@ -45,14 +58,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         switch (v.getId()){
 
             case R.id.button_Amis:
-                Intent intent1=new Intent(this, FriendListActivity.class);
-                intent1.putExtra("TYPELISTE", "friends"); // friends identique à la variable du firebase
-                startActivity(intent1);
+                startActivity(new Intent("com.example.chagnoda.mapit.FriendListActivity"));
+               // Intent intent1=new Intent(this, FriendListActivity.class);
+               // intent1.putExtra("TYPELISTE", getText(R.id.profilename_text)); // friends identique à la variable du firebase
+               // startActivity(intent1);
                 break;
             case R.id.button_Events:
-                Intent intent2=new Intent(this,EventListActivity.class);
-                intent2.putExtra("TYPELISTE", "events"); // events identique à la variable du firebase
-                startActivity(intent2);
+                startActivity(new Intent("com.example.chagnoda.mapit.EventListActivity"));
+                //Intent intent2=new Intent(this,EventListActivity.class);
+               // intent2.putExtra("TYPELISTE", "events"); // events identique à la variable du firebase
+               // startActivity(intent2);
                 break;
 
         }

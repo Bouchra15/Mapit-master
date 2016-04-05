@@ -11,12 +11,16 @@ public class Profile {
     private String email;
     private String password;
     private Image profilepicture;  //
-    private Profile[] friends;
+   // private Profile[] friends;
     private Photo[] photos;
     private String Password;
 
 
+    public String userName; //
+    public String photoUrl;
 
+    public List<Friend> friends;
+    public List<Event> events;
 
 
    // public Groupe[] actualGroups;
