@@ -1,16 +1,24 @@
 package com.example.chagnoda.mapit;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -22,34 +30,40 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     Button events;
     TextView profileName;
     ImageView photoProfile;
-
+    Firebase fire=new Firebase("https://sizzling-inferno-6141.firebaseio.com/Mapit/Profiles");
     Profile Profiles;
+    Persons persons;
 
    // public List<FriendListActivity> friendsProfile;
     //public List<EventListActivity> Events;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        Firebase.setAndroidContext(this);
 
-        photoProfile=(ImageView)findViewById(R.id.PhotoProfile);
-        profileName=(TextView)findViewById(R.id.profilename_text);
+        photoProfile = (ImageView) findViewById(R.id.PhotoProfile);
+        profileName = (TextView) findViewById(R.id.profilename_text);
 
-        Intent intent=getIntent();
+        Intent intent = getIntent();
+        Profile profile = new Profile();
+        String strProfile = fire.child("https://sizzling-inferno-6141.firebaseio.com/Mapit/Profiles").getKey();
 
-        String sprofileName=intent.getStringExtra("NAME");
-        String sphotoProfile=intent.getStringExtra("PHOTO");
+        profileName.setText(strProfile);
+                //Picasso.with(this).load(sphotoProfile).into(photoProfile);
 
-
-        profileName.setText(sprofileName);
-        Picasso.with(this).load(sphotoProfile).into(photoProfile);
+            // snapshot.getValue().toString()
 
         amis=(Button)findViewById(R.id.button_Amis);
         events=(Button)findViewById(R.id.button_Events);
 
         amis.setOnClickListener(this);
         events.setOnClickListener(this);
+
+        RunAPI run = new RunAPI();
+        run.execute();
     }
 
     @Override
@@ -59,15 +73,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
             case R.id.button_Amis:
                 startActivity(new Intent("com.example.chagnoda.mapit.FriendListActivity"));
-               // Intent intent1=new Intent(this, FriendListActivity.class);
-               // intent1.putExtra("TYPELISTE", getText(R.id.profilename_text)); // friends identique à la variable du firebase
-               // startActivity(intent1);
+
                 break;
             case R.id.button_Events:
                 startActivity(new Intent("com.example.chagnoda.mapit.EventListActivity"));
-                //Intent intent2=new Intent(this,EventListActivity.class);
-               // intent2.putExtra("TYPELISTE", "events"); // events identique à la variable du firebase
-               // startActivity(intent2);
+
                 break;
 
         }
@@ -75,5 +85,19 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
 
+    }
+
+    public class RunAPI extends AsyncTask<String, String, Persons>{
+
+        @Override
+        protected Persons doInBackground(String... params) {
+            webAPI api = new webAPI();
+            try{
+                persons = api.run();
+                Log.d("Dans asyncTask ", ((Integer)persons.listpersons.size()).toString());
+            }catch (IOException e){}
+
+            return persons;
+        }
     }
 }

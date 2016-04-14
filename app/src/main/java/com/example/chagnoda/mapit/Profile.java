@@ -7,7 +7,7 @@ import java.util.List;
  * Created by David on 22/03/2016.
  */
 public class Profile {
-    private String username; //
+
     private String email;
     private String password;
     private Image profilepicture;  //
@@ -19,25 +19,26 @@ public class Profile {
     public String userName; //
     public String photoUrl;
 
-    public List<Friend> friends;
+    public List<Friend> friends; //
+   // private Profile[] ;
     public List<Event> events;
 
 
    // public Groupe[] actualGroups;
    // public Groupe[] groupsHistory;
 
-
+    public Profile(){}
     public Profile(String username, String email, String password) {
-        this.username = username;
+        this.userName = username;
         this.email = email;
         this.password = password;
         //this.profilepicture = profilePicture;
     }
     public String getUserName(){
-        return this.username;
+        return this.userName;
     }
     public Image getProfilePicture(){return this.profilepicture;}
-    public void setUserName(String newUserName) {this.username = newUserName;}
+    public void setUserName(String newUserName) {this.userName = newUserName;}
     public void setProfilePicture(Image newProfilePicture){this.profilepicture = newProfilePicture;}
 
     }

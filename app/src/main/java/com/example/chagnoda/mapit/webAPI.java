@@ -1,9 +1,16 @@
 package com.example.chagnoda.mapit;
 
+import android.util.Log;
+
 import java.io.IOException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
@@ -20,28 +27,44 @@ public class webAPI {
       //typeProfile=NameProfile;
     }
 
-    public Profile run() throws IOException {
+    public Persons run() throws IOException {
 
-        //récuperer le contenu hatml a partir d'un url
-        OkHttpClient client=new OkHttpClient();
-        Request request=new Request.Builder().url(url).build();
-        Response response=client.newCall(request).execute();
-        String json=response.body().string();
+        final Persons persons = new Persons();
+        final Person person = new Person();
 
-        //parser le contenu json à partir de la string json
-        Moshi moshi=new Moshi.Builder().build();// MOSHI LIBRAIRIE QUI PERMET DE FAIRE PARSING
-        JsonAdapter<Root> jsonAdapter=moshi.adapter(Root.class);                      // on lui donne la hierarchie qu'il est supposé à avoir comme
-        Root root=jsonAdapter.fromJson(json); // mettre tout le contenu de json dans root et c'est moshi qui fait ça
+        ///Mapit/Profiles.json
+        Firebase myFirebaseRef = new Firebase("https://sizzling-inferno-6141.firebaseio.com/");
 
-        // Récupérer les films
+        myFirebaseRef.child("Mapit/Profiles").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Log.d("firebase", String.valueOf(snapshot.getValue()));
+                Log.d("firebase", "Compte = " + snapshot.getChildrenCount());
 
-        Profile profile;
-        for(int i=0; i<root.Profiles.size(); i++){
-            // if(root.Lineups.get(i).Title.equals("Films")){
-                profile=root.Profiles.get(i);
-                return profile;
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    Log.d("firebase", "enfant : " + String.valueOf(child));
+                    Log.d("firebase", "key    : " + child.getKey());
+                    Log.d("firebase", "value  : " + String.valueOf(child.getValue()));
+                    Log.d("firebase", "email  : " + String.valueOf(child.child("email").getValue()));
+
+                    person.key = child.getKey();
+                    person.email = String.valueOf(child.child("email").getValue());
+                    person.username = String.valueOf(child.child("userName").getValue());
+                    person.password = String.valueOf(child.child("password").getValue());
+
+                    // a verifier
+                    persons.listpersons.add(person);
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError error) {
+            }
+
+            });
+        Log.d("PERSONS SIZE ", ((Integer)persons.listpersons.size()).toString());
+            return persons;
 
         }
-        return null;
-    }
+
 }
