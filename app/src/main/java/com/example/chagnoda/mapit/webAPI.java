@@ -23,7 +23,7 @@ public class webAPI {
     public String typeProfile;
 
     public webAPI() {
-      url = "https://sizzling-inferno-6141.firebaseio.com/Mapit.json";
+     // url = "https://sizzling-inferno-6141.firebaseio.com/Mapit.json";
       //typeProfile=NameProfile;
     }
 
@@ -42,15 +42,19 @@ public class webAPI {
                 Log.d("firebase", "Compte = " + snapshot.getChildrenCount());
 
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    Log.d("firebase", "enfant : " + String.valueOf(child));
-                    Log.d("firebase", "key    : " + child.getKey());
-                    Log.d("firebase", "value  : " + String.valueOf(child.getValue()));
-                    Log.d("firebase", "email  : " + String.valueOf(child.child("email").getValue()));
+                    //Log.d("firebase", "enfant : " + String.valueOf(child));
+                  //  Log.d("firebase", "key    : " + child.getKey());
+                   // Log.d("firebase", "value  : " + String.valueOf(child.getValue()));
+                   // Log.d("firebase", "email  : " + String.valueOf(child.child("email").getValue()));
 
-                    person.key = child.getKey();
-                    person.email = String.valueOf(child.child("email").getValue());
-                    person.username = String.valueOf(child.child("userName").getValue());
-                    person.password = String.valueOf(child.child("password").getValue());
+                    Person newperson=child.getValue(Person.class);
+                    newperson.getUserName();
+                    newperson.getEmail();
+                    newperson.getPassword();
+                   // person.key = child.getKey();
+                  //  person.email = String.valueOf(child.child("email").getValue());
+                   // person.username = String.valueOf(child.child("userName").getValue());
+                  //  person.password = String.valueOf(child.child("password").getValue());
 
                     // a verifier
                     persons.listpersons.add(person);
@@ -62,7 +66,7 @@ public class webAPI {
             }
 
             });
-        Log.d("PERSONS SIZE ", ((Integer)persons.listpersons.size()).toString());
+            Log.d("PERSONS SIZE ", ((Integer)persons.listpersons.size()).toString());
             return persons;
 
         }

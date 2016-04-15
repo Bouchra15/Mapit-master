@@ -62,8 +62,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         amis.setOnClickListener(this);
         events.setOnClickListener(this);
 
-        RunAPI run = new RunAPI();
-        run.execute();
+        //RunAPI run = new RunAPI();
+       // run.execute();
     }
 
     @Override
@@ -87,17 +87,5 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    public class RunAPI extends AsyncTask<String, String, Persons>{
 
-        @Override
-        protected Persons doInBackground(String... params) {
-            webAPI api = new webAPI();
-            try{
-                persons = api.run();
-                Log.d("Dans asyncTask ", ((Integer)persons.listpersons.size()).toString());
-            }catch (IOException e){}
-
-            return persons;
-        }
-    }
 }
