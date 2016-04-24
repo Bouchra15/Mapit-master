@@ -32,7 +32,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     ImageView photoProfile;
     Firebase fire=new Firebase("https://sizzling-inferno-6141.firebaseio.com/Mapit/Profiles");
     Profile Profiles;
-    Persons persons;
+
 
    // public List<FriendListActivity> friendsProfile;
     //public List<EventListActivity> Events;

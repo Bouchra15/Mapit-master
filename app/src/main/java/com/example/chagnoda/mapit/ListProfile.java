@@ -23,12 +23,12 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListProfile extends AppCompatActivity {
 
     ListView listView;
 
-    Persons persons;
     MyAdapter adapter;
 
     @Override
@@ -36,50 +36,55 @@ public class ListProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_profile);
 
+        Firebase.setAndroidContext(this);
+
+        Firebase myFirebaseRef= new Firebase("https://sizzling-inferno-6141.firebaseio.com/");
+
+        myFirebaseRef.child("Mapit/Profiles").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
 
 
-        //Firebase.setAndroidContext(this);
+                List<NewProfil> profiles = new ArrayList<NewProfil>();
+
+                for (DataSnapshot child : snapshot.getChildren()) {
+
+                    NewProfil newProfil = new NewProfil();
+
+                    newProfil.email = String.valueOf(child.child("email").getValue());
+                    newProfil.userName = String.valueOf(child.child("userName").getValue());
+                    newProfil.password = String.valueOf(child.child("password").getValue());
+
+                    profiles.add(newProfil);
+
+
+                }
+                adapter=new MyAdapter(profiles);
+                listView.setAdapter(adapter);
+
+            }
+                @Override
+            public void onCancelled(FirebaseError error) {
+            }
+        });
         listView=(ListView)findViewById(R.id.list_profiles);
-        RunAPI run=new RunAPI();
-        run.execute(); // va appeler  doInBackground
-
-
-
     }
 
-    public class RunAPI extends AsyncTask<String, String, Persons> {
 
-        @Override
-        protected Persons doInBackground(String... params) {
-            webAPI api = new webAPI();
-            try{
-                persons = api.run();
-                Log.d("Dans asyncTask ", ((Integer)persons.listpersons.size()).toString());
-            }catch (IOException e){}
-
-            return persons;
-        }
-
-        @Override
-        protected void onPostExecute(Persons persons) {
-            super.onPostExecute(persons);
-            adapter=new MyAdapter();
-            listView.setAdapter(adapter);
-            //listView.setOnItemClickListener((AdapterView.OnItemClickListener) ListProfile.this);
-        }
-    }
 
     public class MyAdapter extends BaseAdapter{
 
         LayoutInflater inflater;
+        List<NewProfil> profiles=new ArrayList<NewProfil>();
 
-        public MyAdapter() {
+        public MyAdapter(List<NewProfil> profiles) {
+            this.profiles=profiles;
             inflater=(LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
         }
 
         @Override
         public int getCount() {
-            return persons.listpersons.size();
+            return profiles.size();
         }
 
         @Override
@@ -95,22 +100,28 @@ public class ListProfile extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            View v=convertView; // convertView d'un seul view
+            View v=convertView;
             if(v==null){
 
-                v=inflater.inflate(R.layout.rangee_friend, parent, false);// on a crée notre propre layout
+                v=inflater.inflate(R.layout.rangeeprofile, parent, false);// on a crée notre propre layout
             }
             if(position%2==0) v.setBackgroundColor(0xFFE3B5B5);
             else v.setBackgroundColor(Color.WHITE);
 
-            TextView tv=(TextView)v.findViewById(R.id.rangee_textFriend);
-            ImageView im=(ImageView)v.findViewById(R.id.photoFriend);
+            TextView tv=(TextView)v.findViewById(R.id.textView_user_id);
+            TextView tv1=(TextView)v.findViewById(R.id.textView_email_id);
+            TextView tv2=(TextView)v.findViewById(R.id.textView_password_id);
 
-            String user=persons.listpersons.get(position).getUserName();
-           // String url=persons.listpersons.get(position).ImageUrl;
+
+            String user=profiles.get(position).userName;
+            String email=profiles.get(position).email;
+            String password=profiles.get(position).password;
+
 
             tv.setText(user);
-           // Picasso.with(getApplicationContext()).load(url).into(im);
+            tv1.setText(email);
+            tv2.setText(password);
+
 
             return v;
         }
