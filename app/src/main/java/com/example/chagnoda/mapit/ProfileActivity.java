@@ -1,69 +1,53 @@
 package com.example.chagnoda.mapit;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.util.List;
-
 /**
- * Created by chengli on 2016-03-21.
+ *
+ * Fait par Bouchra
  */
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button amis;
     Button events;
-    TextView profileName;
-    ImageView photoProfile;
-    Firebase fire=new Firebase("https://sizzling-inferno-6141.firebaseio.com/Mapit/Profiles");
-    Profile Profiles;
-
-
-   // public List<FriendListActivity> friendsProfile;
-    //public List<EventListActivity> Events;
+    TextView textView;
+    ImageView imageView;
+    String user;
+    String imageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        Firebase.setAndroidContext(this);
 
-        photoProfile = (ImageView) findViewById(R.id.PhotoProfile);
-        profileName = (TextView) findViewById(R.id.profilename_text);
-
-        Intent intent = getIntent();
-        Profile profile = new Profile();
-        String strProfile = fire.child("https://sizzling-inferno-6141.firebaseio.com/Mapit/Profiles").getKey();
-
-        profileName.setText(strProfile);
-                //Picasso.with(this).load(sphotoProfile).into(photoProfile);
-
-            // snapshot.getValue().toString()
+        imageView = (ImageView) findViewById(R.id.imageView_photoProfile_id);
+        textView = (TextView) findViewById(R.id.profilename_id_text);
 
         amis=(Button)findViewById(R.id.button_Amis);
         events=(Button)findViewById(R.id.button_Events);
 
+        Intent intent = getIntent();
+        user=intent.getStringExtra("USER_NAME");
+        imageUrl=intent.getStringExtra("PHOTO_URL");
+
+        textView.setText(user);
+        Picasso.with(this).load(imageUrl).into(imageView);
+
+
+
         amis.setOnClickListener(this);
         events.setOnClickListener(this);
 
-        //RunAPI run = new RunAPI();
-       // run.execute();
+
     }
 
     @Override
@@ -72,11 +56,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         switch (v.getId()){
 
             case R.id.button_Amis:
-                startActivity(new Intent("com.example.chagnoda.mapit.FriendListActivity"));
+                Intent intent=new Intent(ProfileActivity.this, FriendListActivity.class);
+                intent.putExtra("USERNAME", user);
 
+                startActivity(intent);
                 break;
             case R.id.button_Events:
-                startActivity(new Intent("com.example.chagnoda.mapit.EventListActivity"));
+
 
                 break;
 

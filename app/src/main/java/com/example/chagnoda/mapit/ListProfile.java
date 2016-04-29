@@ -32,6 +32,8 @@ import java.util.List;
 //Fait par Bouchra
 // référence : Site de Firebase
 
+// les photos sont prix de google (internet)
+
 public class ListProfile extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
     ListView listView;
@@ -130,12 +132,12 @@ public class ListProfile extends AppCompatActivity implements AdapterView.OnItem
 
                 v=inflater.inflate(R.layout.rangeeprofile, parent, false);// on a crée notre propre layout
             }
-            if(position%2==0) v.setBackgroundColor(Color.BLUE);
+            if(position%2==0) v.setBackgroundColor(0xFFE3B5B5);
             else v.setBackgroundColor(Color.WHITE);
 
             TextView tv=(TextView)v.findViewById(R.id.textView_user_id);
-            TextView tv1=(TextView)v.findViewById(R.id.textView_email_id);
-            TextView tv2=(TextView)v.findViewById(R.id.textView_password_id);
+            //TextView tv1=(TextView)v.findViewById(R.id.textView_email_id);
+            //TextView tv2=(TextView)v.findViewById(R.id.textView_password_id);
             ImageView image=(ImageView)v.findViewById(R.id.imageView_rangeePhotoProfile_id);
 
 
@@ -145,8 +147,8 @@ public class ListProfile extends AppCompatActivity implements AdapterView.OnItem
             String UrlPhoto=profiles.get(position).photoUrl;
 
             tv.setText(user);
-            tv1.setText(email);
-            tv2.setText(password);
+            //tv1.setText(email);
+            //tv2.setText(password);
 
             Picasso.with(getApplicationContext()).load(UrlPhoto).into(image);
 

@@ -37,51 +37,94 @@ import java.util.zip.Inflater;
 public class FriendListActivity extends AppCompatActivity {
 
         ListView listView;
-        //MyAdapder adapter;
-        Profile friendsProfile;
-        String typeProfile;  // nom du profile qui a la liste des amis
-        public List<Profile> profileObject=new ArrayList<Profile>();
-        private ArrayList<String> arrayList;
-        private ArrayAdapter<String> adapter;
+        MyAdapter adapter;
+        List<Friend> friendlist=new ArrayList<Friend>();
+        public List<NewProfil> profiles=new ArrayList<NewProfil>();
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_friend_list);
 
-            Intent intent=getIntent();
-            //typeProfile=intent.getStringExtra("TYPELISTE");
             Firebase.setAndroidContext(this);
             listView=(ListView)findViewById(R.id.listFriends);
-            //listView = (ListView)findViewById(R.id.FriendList);
-            arrayList = new ArrayList<>();
 
-            Firebase ref = new Firebase("https://sizzling-inferno-6141.firebaseio.com/Mapit/Profiles");
+            Intent intent=getIntent();
+            String user=intent.getStringExtra("USERNAME");
 
-            ref.addValueEventListener(new ValueEventListener() {
+            Firebase firebase= new Firebase("https://sizzling-inferno-6141.firebaseio.com/Mapit/Profiles");
+            Firebase ref=firebase.child(user);
+            ref.child("friendsList").addValueEventListener(new ValueEventListener() {
+
                 @Override
-                public void onDataChange(DataSnapshot snapshot) {
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    for (DataSnapshot profileSnapshot : snapshot.getChildren()) {
-                        Profile copy_profile = profileSnapshot.getValue(Profile.class);
-                        String username = copy_profile.getUserName();
-                        arrayList.add(username);
-                        Log.d("My App: ", copy_profile.getUserName());
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        Friend friend = new Friend();
+                        friend.name = child.getKey().toString();
+                        friendlist.add(friend);
+
                     }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(FriendListActivity.this, android.R.layout.select_dialog_multichoice, arrayList);
+                    adapter = new MyAdapter(friendlist);
                     listView.setAdapter(adapter);
+
                 }
+
 
                 @Override
                 public void onCancelled(FirebaseError firebaseError) {
-                    System.out.println("The read failed: " + firebaseError.getMessage());
-                }
 
+                }
             });
 
 
 
+
+
+
+
         }
+
+    public class MyAdapter extends BaseAdapter{
+
+        List<Friend> friendlist=new ArrayList<Friend>();
+
+        LayoutInflater inflater;
+        public MyAdapter(List<Friend> friendlist) {
+            this.friendlist=friendlist;
+            inflater=(LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+        }
+
+        @Override
+        public int getCount() {
+            return friendlist.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View v=convertView;
+            if(v==null){
+                v=inflater.inflate(R.layout.rangee_friend, parent, false);
+            }
+            if(position%2==0) v.setBackgroundColor(0xFFE3B5B5);
+            else v.setBackgroundColor(Color.WHITE);
+
+            TextView tv=(TextView)v.findViewById(R.id.rangee_textFriend);
+            String ami=friendlist.get(position).name;
+            tv.setText(ami);
+            return v;
+        }
+    }
 
 
 
