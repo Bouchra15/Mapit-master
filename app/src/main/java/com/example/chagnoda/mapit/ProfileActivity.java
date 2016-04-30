@@ -53,23 +53,20 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
 
+
         switch (v.getId()){
 
             case R.id.button_Amis:
-                Intent intent=new Intent(ProfileActivity.this, FriendListActivity.class);
+                Intent intent =new Intent(ProfileActivity.this, FriendListActivity.class);
                 intent.putExtra("USERNAME", user);
-
                 startActivity(intent);
                 break;
             case R.id.button_Events:
-
-
+                Intent intent1=new Intent(ProfileActivity.this, EventListActivity.class);
+                intent1.putExtra("USERNAME", user);
+                startActivity(intent1);
                 break;
-
         }
-
-
-
 
     }
 

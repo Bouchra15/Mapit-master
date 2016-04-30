@@ -136,19 +136,14 @@ public class ListProfile extends AppCompatActivity implements AdapterView.OnItem
             else v.setBackgroundColor(Color.WHITE);
 
             TextView tv=(TextView)v.findViewById(R.id.textView_user_id);
-            //TextView tv1=(TextView)v.findViewById(R.id.textView_email_id);
-            //TextView tv2=(TextView)v.findViewById(R.id.textView_password_id);
             ImageView image=(ImageView)v.findViewById(R.id.imageView_rangeePhotoProfile_id);
 
 
             String user=profiles.get(position).username;
-            String email=profiles.get(position).email;
-            String password=profiles.get(position).password;
             String UrlPhoto=profiles.get(position).photoUrl;
 
             tv.setText(user);
-            //tv1.setText(email);
-            //tv2.setText(password);
+
 
             Picasso.with(getApplicationContext()).load(UrlPhoto).into(image);
 

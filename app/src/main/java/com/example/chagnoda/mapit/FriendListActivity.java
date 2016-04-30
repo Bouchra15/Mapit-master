@@ -61,7 +61,9 @@ public class FriendListActivity extends AppCompatActivity {
 
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         Friend friend = new Friend();
-                        friend.name = child.getKey().toString();
+                        //friend.name = child.getKey().toString();
+                        friend.name = child.child("name").getValue().toString();
+                        friend.photoUrl=child.child("photoUrl").getValue().toString();
                         friendlist.add(friend);
 
                     }
@@ -76,12 +78,6 @@ public class FriendListActivity extends AppCompatActivity {
 
                 }
             });
-
-
-
-
-
-
 
         }
 
@@ -120,8 +116,13 @@ public class FriendListActivity extends AppCompatActivity {
             else v.setBackgroundColor(Color.WHITE);
 
             TextView tv=(TextView)v.findViewById(R.id.rangee_textFriend);
+            ImageView image=(ImageView)v.findViewById(R.id.photoFriend_id);
+
             String ami=friendlist.get(position).name;
+            String photoUrl=friendlist.get(position).photoUrl;
+
             tv.setText(ami);
+            Picasso.with(getApplicationContext()).load(photoUrl).into(image);
             return v;
         }
     }
